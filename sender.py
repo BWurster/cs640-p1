@@ -28,7 +28,7 @@ def process_request(file_req, requester_ip, req_port, rate, curr_seq_no, length)
             remain_file_len -= length
 
         # create udp header (D since its a data packet)
-        udp_header = struct.pack("!cII", b'D', curr_seq_no, tell_length)
+        udp_header = struct.pack("!cII", b'D', socket.htonl(curr_seq_no), tell_length)
 
         # print information
         print("DATA Packet")

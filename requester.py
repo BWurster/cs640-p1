@@ -9,6 +9,8 @@ socket_obj = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 this_host = socket.gethostname()
 this_ip_addr = socket.gethostbyname(this_host)
 
+print(this_ip_addr)
+
 def send_data(line):
     ip_addr = socket.gethostbyname(line[2])
     sender_addr = (ip_addr, int(line[3]))
@@ -44,10 +46,10 @@ def receive_data():
         print(packet_type[udp_header[0]] + " Packet")
         print("recv time   " + str(datetime.now()))
         print("sender addr:  " + sender_ip + ":" + str(sender_port))
-        print("sequence:  " + str(udp_header[1]))
+        print("sequence:  " + str(socket.ntohl(udp_header[1])))
         print("length:  " + str(udp_header[2]))
         if udp_header[0] == b'D':
-            print("payload:  " + str(data[0:4]))
+            print("payload:  " + data[0:4].decode())
             total_packets += 1
         else:
             print("payload:  0")
@@ -65,9 +67,6 @@ def receive_data():
             print("Average packets/second  " + str(total_packets/(end_time - start_time)))
             print("Duration of the test  " + str(end_time - start_time))
             break
-
-        # leave space
-        print("")
 
 
 def main():

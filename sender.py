@@ -10,10 +10,18 @@ this_host = socket.gethostname()
 this_ip_addr = socket.gethostbyname(this_host)
 
 def process_request(file_req, requester_ip, req_port, rate, curr_seq_no, length):
+    # process packet with print statements
+    print("Sender's print information")
+    
     # maybe we end of file token
-    remain_file_len = os.path.getsize(file_req)
+    remain_file_len = os.path.getsize(os.path.dirname(__file__) + "/" + file_req.decode())
     payload = ""
-    extract_file = open(file_req, "r")
+
+    try:
+        extract_file = open(os.path.dirname(__file__) + "/" + file_req.decode(), "r")
+    except:
+        print("A file error has occurred.")
+
     while (remain_file_len > 0):
         saveTime = time.time()
         tell_length = 0
@@ -57,7 +65,7 @@ def process_request(file_req, requester_ip, req_port, rate, curr_seq_no, length)
 
     # send END packet once done
     # create udp header (E since it's an end packet)
-    udp_header = struct.pack("!cII", b'E', curr_seq_no, 0)
+    udp_header = struct.pack("!cII", b'E', socket.htonl(curr_seq_no), 0)
     # combine header with payload (no payload for end packet)
     packet_with_header = udp_header
 

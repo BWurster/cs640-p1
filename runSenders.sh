@@ -2,7 +2,7 @@ start=1
 end=$1
 
 touch tracker2.txt
-echo "" > tracker2.txt
+echo -n "" > tracker2.txt
 
 # Loop to create directories
 for ((i = start; i <= end; i++)); do
